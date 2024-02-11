@@ -6,7 +6,7 @@ import traceback
 from flask import Flask, request, jsonify, make_response
 from werkzeug.utils import secure_filename
 from nlm_ingestor.ingestor import ingestor_api
-from nlm_utils.utils import file_utils
+from nlm_ingestor.utils import extract_file_properties
 
 app = Flask(__name__)
 
@@ -39,7 +39,7 @@ def parse_document(
         os.close(tempfile_handler)
         file.save(tmp_file)
         # calculate the file properties
-        props = file_utils.extract_file_properties(tmp_file)
+        props = extract_file_properties(tmp_file)
         logger.info(f"Parsing document: {filename}")
         ingest_status, return_dict = ingestor_api.ingest_document(
             filename,
